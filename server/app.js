@@ -7,7 +7,9 @@ const bodyParser = require('body-parser');
 
 const app = express();
 
-const jsonParser = bodyParser.json();
+// const jsonParser = bodyParser.json();
+// Middleware setup
+// app.use(jsonParser);
 
 app.set('port', process.env.PORT || 3003); //prod vs test environment switch
 
@@ -23,8 +25,6 @@ app.get('/rooms/:id', function(req, res) {
   res.sendFile(reactPath);
 });
 
-// Middleware setup
-app.use(jsonParser);
 app.use('/api', routes);
 
 module.exports = app;

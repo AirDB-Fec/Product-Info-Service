@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import FontAwesome from 'react-fontawesome';
-import PropTypes from 'prop-types';
+import propTypes from 'prop-types';
 
 class Tile extends Component {
   constructor(props) {
@@ -63,9 +63,9 @@ class Tile extends Component {
     );
   }
 }
-Tile.PropTypes = {
-  leftArrow: PropTypes.boolean,
-  rightArrow: PropTypes.boolean
+Tile.propTypes = {
+  leftArrow: propTypes.boolean,
+  rightArrow: propTypes.boolean
 };
 Tile.defaultProps = { leftArrow: false, rightArrow: false };
 export default Tile;

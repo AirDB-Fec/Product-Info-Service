@@ -15,5 +15,3 @@ const getWords = function() {
   }
 }
 getWords();
-
-//     "load4": "time node ./db/generators/generateRoomNames.js > ./db/generators/JSONfiles/roomNames_10M.json"

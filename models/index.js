@@ -1,10 +1,11 @@
-const { Pool } = require('pg')
+const { Pool } = require('pg');
+const { POSTGRES } = require('../keys.js'); //array
 
 const pool = new Pool({
-  user: 'sam',
-  host: 'localhost',
+  user: 'sam', //0
+  host: 'localhost', //1
   database: 'sdc',
-  password: null,
+  password: null, //2
   port: 5432,
 });
 

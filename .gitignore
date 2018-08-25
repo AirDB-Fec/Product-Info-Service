@@ -24,11 +24,12 @@ coverage
 build/
 dist/
 
-# AWS
-aws-keys.json
-
 # Large files
 db/generators/JSONfiles/
 
 # Keys
+aws-keys.json
 keys.js
+
+# Notes
+benchmarkNotes.js

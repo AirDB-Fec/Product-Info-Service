@@ -1,54 +1,37 @@
-// Handle incoming routes form server
-
 const app = require('express');
-const ctrl = require('./../controllers');
+const crud = require('./../controllers');
 const router = app.Router();
 
-// READ
-router.get('/rooms/:id', (req, res) => {
-  console.log('here inside routes/index', req.params.id);
-  ctrl.getRoom(req.params.id, (err, data) => {
-    if (err) {
-      res.status(404).send(err);
-    } else {
-      res.json(data);
-    }
-  });
+// REDIS CONNECTION /////////////////////////////////////////////////
+
+const redis = require('redis');
+const client = redis.createClient({ socket_keepalive: true });
+
+client.on("error", function (err) {
+    console.log("Error " + err);
 });
 
+// ROUTER GET ///////////////////////////////////////////////////////
 
-// CREATE
-router.post('/', (req, res) => {
-  ctrl.postRoom(req.body, (err, data) => {
-    if (err) {
-      res.status(404).send(err);
-    } else {
-      console.log('successfully posted');
-      res.json(data);
-    }
-  });
-});
+router.get('/rooms/:id/productinfo', (req, res) => {
+  let roomId = req.params.id;
 
-// UPDATE
-router.put('/rooms/:id', (req, res) => {
-  console.log('PUT-- here inside routes/index', req.params.id, req.body);
-  ctrl.updateRoom(req.params.id, req.body, (err, data) => {
+  client.get(roomId, (err, reply) => {
     if (err) {
-      res.status(404).send(err);
+      res.send(err);
+    } else if (reply !== null) {
+      res.json(JSON.parse(reply));
     } else {
-      res.json(data);
-    }
-  });
-});
-
-// DELETE
-router.delete('/rooms/:id', (req, res) => {
-  console.log('DELETE-- here inside routes/index', req.params.id);
-  ctrl.deleteRoom(req.params.id, (err, data) => {
-    if (err) {
-      res.status(404).send(err);
-    } else {
-      res.json(data);
+      crud.getRoom(roomId, (err, room) => {
+        if (err) {
+          res.send(err);
+        } else {
+          res.json(room);
+          client.set(roomId, JSON.stringify(room), (err) => {
+            if (err) { res.send(err); }
+          });
+        }
+      });
     }
   });
 });

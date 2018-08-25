@@ -70,7 +70,7 @@ class Amenities extends Component {
             return (
               <div className={clName} key={i}>
                 {amenitiesObj[type][i].name}
-                {amenitiesObj[type][i].explanation.length > 0 ? (
+                {(amenitiesObj[type][i].explanation.length > 0  && amenitiesObj[type][i].explanation !== "0") ? (
                   <div className="amenity__exp" key={`exp${i}`}>
                     {' '}
                     {amenitiesObj[type][i].explanation}

@@ -1,55 +1,23 @@
-// Contain DB methods
+// DB CONNECTION ////////////////////////////////////////////////////
 
-const db = require("../models");
+const { pool } = require("../models");
 
-// Method retereives document
+// GET METHOD WITH REDIS IMPLEMENTATION /////////////////////////////
+
 const getRoom = (roomId, callback) => {
-  let query = db.Room.findOne({ room_id: roomId });
-  query.exec((err, room) => {
+  const query = {
+    name: 'fetch-room',
+    text: `SELECT page_info.*, ARRAY_TO_STRING((SELECT ARRAY_AGG('{\"amenityType\":\"' || amenity_type ||'\",\"name\":\"'|| name ||'\",\"icon\":\"'|| COALESCE(icon, '0')  ||'\",\"explanation\":\"'|| COALESCE(explanation, '0') || '\"}') FROM amenities WHERE page_info.room_id = amenities.room_id), ',') AS amenities FROM page_info WHERE page_info.room_id = $1;`,
+    values: [roomId],
+  }
+
+  pool.query(query, (err, room) => {
     if (err) {
-      console.log("error in getting room: ", err);
       callback(err);
+    } else {
+      callback(null, room);
     }
-    callback(null, room);
   });
 };
 
-// Method adds document
-const postRoom = (dataItem, callback) => {
-  db.Room.create(dataItem, (err, room) => {
-    if (err) {
-      console.log("error in posting room: ", err);
-      callback(err);
-    }
-    callback(null, room);
-  });
-};
-
-// Method updates document
-const updateRoom = (roomId, dataItem, callback) => {
-  let query = db.Room.updateOne(
-    { room_id: roomId },
-    { $set: dataItem }
-  );
-  query.exec((err, room) => {
-    if (err) {
-      console.log("error in getting room: ", err);
-      callback(err);
-    }
-    callback(null, room);
-  });
-};
-
-// Method deletes document
-const deleteRoom = (roomId, callback) => {
-  let query = db.Room.deleteOne({ room_id: roomId });
-  query.exec((err, room) => {
-    if (err) {
-      console.log("error in getting room: ", err);
-      callback(err);
-    }
-    callback(null, room);
-  });
-};
-
-module.exports = { getRoom, postRoom, updateRoom, deleteRoom};
+module.exports = { getRoom };

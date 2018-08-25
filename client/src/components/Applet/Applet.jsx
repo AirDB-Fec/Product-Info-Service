@@ -7,32 +7,13 @@ import Rules from './../Rules/Rules.js';
 import Cancellation from './../Cancellations/Cancellation.js';
 import Amenities from './../Amenities/Amenities.js';
 
-
 class Applet extends Component {
   constructor(props) {
     super(props);
     this.state = {
       room: {}
     };
-
-    console.log('applet', this.state.room);
   }
-
-  // componentDidMount() {
-  //   this.getData();
-  //   // console.log('state now: ', this.state.room);
-  // }
-
-  // getData() {
-  //   const id = parseInt(window.location.pathname.split('/').pop());
-  //   const self = this;
-  //   $.get(`/api/rooms/${id}`, function(data) {
-  //     console.log('success got data', data);
-  //     self.setState({ room: data });
-  //   }).fail(function() {
-  //     alert('error');
-  //   });
-  // }
 
   componentDidMount() {
     this.getData();
@@ -41,16 +22,28 @@ class Applet extends Component {
   getData() {
     const id = parseInt(window.location.pathname.split('/').pop());
     const self = this;
-    fetch(`/api/rooms/${id}`)
+    fetch(`/api/rooms/${id}/productinfo`)
       .then(response => response.json())
-      .then(data => this.setState({ room: data }))
+      .then(data => this.setState({ room: self.adapter(data) }))
       .catch(() => {
         console.log("error")});
   }
 
-  render() {
+   adapter(room) {
+    room = room.rows[0];
+    room.house_rules = JSON.parse("[\"" + room.house_rules.replace(/\*/g ,"\",\"").slice(1,-1) + "\"]");
+    room.cancellations = JSON.parse("[\"" + room.cancellations.replace(/\*/g ,"\",\"").slice(1,-1) + "\"]");
+    room.sleeping_arrangements = JSON.parse("[\"" + room.sleeping_arrangements.replace(/\*/g ,"\",\"").slice(1,-1) + "\"]");
+    room.amenities = JSON.parse("[" + room.amenities + "]");
+    room.highlights = [
+      "molestiae iusto",
+      "Cupiditate ex deleniti sed illo explicabo non vero nihil non. Nobis esse non ut voluptas ut possimus deleniti. Maxime nostrum et tenetur. Consequatur ea sunt cupiditate et hic incidunt. Sit voluptatem ut ut consequatur neque impedit modi provident et. Sapiente fugit soluta provident debitis consequatur."
+    ];
+    return room;
+  }
 
-    console.log(this.state.room)
+
+  render() {
     return (
       <div>
         <Summary className="summary section" room={this.state.room} />

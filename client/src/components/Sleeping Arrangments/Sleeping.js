@@ -51,7 +51,6 @@ class Sleeping extends Component {
 
   render() {
     let allTiles = this.state.beds || [];
-    console.log(allTiles);
     let displayTiles = allTiles.slice(this.state.start, this.state.end + 1);
 
     return (

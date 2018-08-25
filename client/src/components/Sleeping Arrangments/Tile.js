@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import FontAwesome from 'react-fontawesome';
-import PropTypes from 'prop-types';
+import propTypes from 'prop-types';
 
 class Tile extends Component {
   constructor(props) {
@@ -8,7 +8,6 @@ class Tile extends Component {
   }
 
   render() {
-    console.log('tile', this.props);
     let tiles = [];
     let roomNo = this.props.start + 1;
     for (let j = 0; j < this.props.detail.length; j++) {
@@ -41,7 +40,6 @@ class Tile extends Component {
       tiles.push(tile);
       roomNo++;
     }
-    console.log();
     return (
       <div className="tile--display">
         <div
@@ -65,9 +63,9 @@ class Tile extends Component {
     );
   }
 }
-Tile.PropTypes = {
-  leftArrow: PropTypes.boolean,
-  rightArrow: PropTypes.boolean
+Tile.propTypes = {
+  leftArrow: propTypes.boolean,
+  rightArrow: propTypes.boolean
 };
 Tile.defaultProps = { leftArrow: false, rightArrow: false };
 export default Tile;
